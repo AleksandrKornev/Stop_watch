@@ -16,7 +16,8 @@ export default class App extends React.Component {
     hours  : 0 ,
     time   : 0 ,
     statusStopWatch : false,
-    statusResetWatch : false
+    statusResetWatch : false,
+    animateHeightTwoBlockNode : new Animated.Value(0)
   };
   componentWillMount () {
     
@@ -67,10 +68,24 @@ export default class App extends React.Component {
       this.setState({time : ((this.state.hours < 10 ? '0' + this.state.hours : this.state.hours)  + ':' + ( this.state.minutes < 10 ? '0' + this.state.minutes : this.state.minutes) + ':' + ( this.state.seconds < 10 ? '0' + this.state.seconds : this.state.seconds))})
   }
 
+  animateHeight = () => {
+    Animated.timing(this.state.animateHeightTwoBlockNode, {
+      toValue: this.state.animateHeightTwoBlockNode._value + this.counterHeightTwoBlock,
+      duration: 800
+    }).start(
+      () => this.setState({animateHeightTwoBlockNode: new Animated.Value(this.state.animateHeightTwoBlockNode._value)})
+    )
+    
+  }
+
   Start = () => {
     if(this.state.statusStopWatch == false){
       st = setInterval(() => {
-        if(this.state.seconds < 60)  this.setState({seconds : this.state.seconds + 1})
+        if(this.state.seconds < 60) {
+          this.setState({seconds : this.state.seconds + 1})
+          this.animateHeight()
+          //this.setState({animateHeightTwoBlockNode: this.state.animateHeightTwoBlockNode + this.counterHeightTwoBlock})
+        }
         if(this.state.seconds == 60) {
           this.setState({minutes: this.state.minutes + 1})
           this.setState({seconds: 0})
@@ -106,6 +121,7 @@ export default class App extends React.Component {
     }
   }
 
+  counterHeightTwoBlock = 2
   render() {
     
 
@@ -122,7 +138,7 @@ export default class App extends React.Component {
           <Animated.View style={[{display : this.state.twoDisplay, opacity: this.state.twoAnimateOpacity}, styles.twoDisplay]}>
               <Animated.Text style={[{fontSize : 30, color: 'lightskyblue',opacity: this.state.twoAnimateOpacityText}]}>World</Animated.Text>
               <Animated.View style={[styles.twoBlock, {display : this.state.twoDisplayBlock,opacity : this.state.twoOpacityBlock}]}>
-                <Animated.View style={[{backgroundColor: 'rgba(255,255,255, 0.4)', width: '100%', height: '100%',borderRadius : 30}]}>
+                <Animated.View style={[{backgroundColor: 'rgba(255,255,255, 0.4)', width: '100%', height: this.state.animateHeightTwoBlockNode , position: 'absolute', bottom: 0}]}>
                 </Animated.View>
               </Animated.View>
               <Animated.Text style={[{display : this.state.twoDisplayBlock,opacity : this.state.twoOpacityBlock, fontSize: 18}]}>
@@ -175,7 +191,7 @@ export default class App extends React.Component {
                     </Animated.Text>
                   </Animated.View>*/
 
-
+const heightTwoBlockNode   = 150
 //git new text
 //git new text 2
 
@@ -193,6 +209,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   twoDisplay: {
+    position: 'relative',
     width: '100%',
     height: '100%',
     justifyContent: 'center',
@@ -201,15 +218,15 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   twoBlock : {
+    position: 'relative',
     display: 'flex',
     width: '50%',
-    height: '30%',
+    height: heightTwoBlockNode,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     borderRadius : 30,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginTop: '-20%',
-    marginBottom: '5%'
+    marginBottom: '5%',
+    overflow: 'hidden'
   },
   button: {
     margin: 10,
