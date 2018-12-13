@@ -121,7 +121,7 @@ export default class App extends React.Component {
     }
   }
 
-  counterHeightTwoBlock = 2
+  counterHeightTwoBlock = 2.5
   render() {
     
 
