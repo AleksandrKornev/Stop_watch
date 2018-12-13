@@ -179,6 +179,8 @@ export default class App extends React.Component {
 //git new text
 //git new text 2
 
+//git new text 3
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
